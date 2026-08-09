@@ -7,9 +7,9 @@
   "tags": ["godot", "gdscript", "gameplay", "state-machine", "fsm", "architecture"],
   "source": {
     "type": "github",
-    "url": "https://github.com/godotengine/godot-demo-projects/tree/master/2d/finite_state_machine",
+    "url": "https://github.com/godotengine/godot-demo-projects/tree/4652e17c04fe5f249dc53949fb195a3d8b24ee5f/2d/finite_state_machine",
     "repository": "godotengine/godot-demo-projects",
-    "ref": "master",
+    "ref": "4652e17c04fe5f249dc53949fb195a3d8b24ee5f",
     "path": "2d/finite_state_machine",
     "author": "Godot Engine contributors",
     "retrievedAt": "2026-08-09T16:05:00Z"
@@ -21,7 +21,7 @@
     "commercialUse": true,
     "derivatives": true,
     "attributionRequired": true,
-    "evidenceUrl": "https://github.com/godotengine/godot-demo-projects/blob/master/LICENSE.md",
+    "evidenceUrl": "https://github.com/godotengine/godot-demo-projects/blob/4652e17c04fe5f249dc53949fb195a3d8b24ee5f/LICENSE.md",
     "verifiedAt": "2026-08-09T16:05:00Z",
     "notes": "RatCodex mirrors only the two core GDScript files in this package. The complete upstream demo remains linked and may contain additional assets/notices that should be reviewed before copying wholesale."
   },
@@ -30,6 +30,15 @@
     "contextMode": "portable",
     "copyReady": true,
     "transcriptPolicy": "none"
+  },
+  "preview": {
+    "mode": "image",
+    "provider": "upstream",
+    "heroUrl": "https://raw.githubusercontent.com/godotengine/godot-demo-projects/4652e17c04fe5f249dc53949fb195a3d8b24ee5f/2d/finite_state_machine/screenshots/fsm-attack.png",
+    "interactive": false,
+    "aspectRatio": "16:9",
+    "fallback": "source",
+    "notes": "Official upstream screenshot pinned to the same immutable source commit. Forge can still import the copy-ready GDScript core exactly as before."
   },
   "compatibility": {
     "engines": ["Godot 4"],
