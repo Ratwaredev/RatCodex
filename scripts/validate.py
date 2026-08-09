@@ -62,8 +62,8 @@ def validate_preview(package_dir: Path, preview: dict, rel: Path, errors: list[s
         errors.append(f"{rel}: godot-scene preview needs entrypoint or runtimeEntrypoint")
 
     if provider == "upstream" and mode not in {"none", "godot-scene"}:
-        if not preview.get("heroUrl") and not preview.get("gallery"):
-            errors.append(f"{rel}: upstream visual preview needs heroUrl or gallery")
+        if not preview.get("url") and not preview.get("heroUrl") and not preview.get("gallery"):
+            errors.append(f"{rel}: upstream visual preview needs url, heroUrl or gallery")
 
     if provider not in {"package", "generated"}:
         return
@@ -226,10 +226,9 @@ def main() -> int:
         if not manifest:
             continue
         if row.get("preview") != manifest.get("preview") and row.get("preview") is not None:
-            # The compact index may omit notes/capture fields but must preserve the core visual identity.
             indexed_preview = row.get("preview", {})
             canonical_preview = manifest.get("preview", {})
-            for key in ("mode", "provider", "hero", "heroUrl", "entrypoint", "runtimeEntrypoint", "interactive", "aspectRatio", "fallback"):
+            for key in ("mode", "provider", "url", "hero", "heroUrl", "entrypoint", "runtimeEntrypoint", "interactive", "aspectRatio", "fallback"):
                 if key in indexed_preview and indexed_preview.get(key) != canonical_preview.get(key):
                     errors.append(f"catalog/index.json package {rid}: preview.{key} differs from manifest")
 
