@@ -75,6 +75,7 @@
         "provider": {
           "enum": ["package", "upstream", "forge-local", "generated"]
         },
+        "url": { "type": "string", "format": "uri" },
         "hero": { "type": "string" },
         "heroUrl": { "type": "string", "format": "uri" },
         "gallery": {
