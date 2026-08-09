@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-09T15:55:00Z",
+  "sources": [
+    {
+      "id": "github.godotengine.godot-demo-projects",
+      "title": "Godot Demo Projects",
+      "kind": "github-collection",
+      "url": "https://github.com/godotengine/godot-demo-projects",
+      "repository": "godotengine/godot-demo-projects",
+      "description": "Official demonstration and template projects for Godot.",
+      "snapshot": {
+        "stars": 9308,
+        "defaultBranch": "master",
+        "checkedAt": "2026-08-09T15:00:00Z"
+      },
+      "rights": {
+        "status": "verified",
+        "license": "MIT",
+        "redistribution": "selective",
+        "commercialUse": true,
+        "evidenceUrl": "https://github.com/godotengine/godot-demo-projects",
+        "notes": "Root repository is MIT. Normalize demo-by-demo and retain any third-party notices/assets encountered during ingestion."
+      },
+      "priority": "high",
+      "adapters": ["github", "godot"]
+    },
+    {
+      "id": "github.gdquest-demos.godot-4-vfx-assets",
+      "title": "GDQuest Godot 4 VFX Assets",
+      "kind": "github-collection",
+      "url": "https://github.com/gdquest-demos/godot-4-VFX-assets",
+      "repository": "gdquest-demos/godot-4-VFX-assets",
+      "description": "Godot 4 particle, shader and VFX examples with mixed licensing.",
+      "snapshot": {
+        "stars": 128,
+        "defaultBranch": "main",
+        "checkedAt": "2026-08-09T15:00:00Z"
+      },
+      "rights": {
+        "status": "mixed",
+        "license": "MIT + CC-BY-NC-SA-4.0",
+        "redistribution": "selective",
+        "commercialUse": null,
+        "evidenceUrl": "https://github.com/gdquest-demos/godot-4-VFX-assets/blob/main/LICENSE",
+        "notes": "Scripts, scenes, shaders and Godot-generated resources are MIT; image textures and 3D models are CC-BY-NC-SA-4.0. Runtime-safe must exclude the non-commercial subset."
+      },
+      "priority": "high",
+      "adapters": ["github", "godot", "mixed-license"]
+    },
+    {
+      "id": "web.kenney.crosshair-pack",
+      "title": "Kenney Crosshair Pack",
+      "kind": "asset-pack",
+      "url": "https://kenney.nl/assets/crosshair-pack",
+      "description": "A 200-file CC0 asset pack suitable as an initial end-to-end mirrored asset test.",
+      "snapshot": {
+        "files": 200,
+        "checkedAt": "2026-08-09T15:00:00Z"
+      },
+      "rights": {
+        "status": "verified",
+        "license": "CC0-1.0",
+        "redistribution": "mirror",
+        "commercialUse": true,
+        "evidenceUrl": "https://kenney.nl/assets/crosshair-pack",
+        "notes": "License is explicitly marked on the individual asset page. Do not infer that every file on the broader site is CC0 without checking its page."
+      },
+      "priority": "high",
+      "adapters": ["web", "asset-pack"]
+    },
+    {
+      "id": "github.practical-tutorials.project-based-learning",
+      "title": "Project Based Learning",
+      "kind": "discovery-index",
+      "url": "https://github.com/practical-tutorials/project-based-learning",
+      "repository": "practical-tutorials/project-based-learning",
+      "description": "Large curated index of project-based programming tutorials.",
+      "snapshot": {
+        "stars": 277536,
+        "defaultBranch": "master",
+        "checkedAt": "2026-08-09T15:45:00Z"
+      },
+      "rights": {
+        "status": "verified",
+        "license": "MIT",
+        "redistribution": "metadata-only",
+        "commercialUse": true,
+        "evidenceUrl": "https://github.com/practical-tutorials/project-based-learning",
+        "notes": "The index itself is MIT. Linked tutorials are independent upstream works and must be individually verified before mirroring/transcription."
+      },
+      "priority": "high",
+      "adapters": ["github", "link-index"]
+    },
+    {
+      "id": "github.ebookfoundation.free-programming-books",
+      "title": "Free Programming Books",
+      "kind": "discovery-index",
+      "url": "https://github.com/EbookFoundation/free-programming-books",
+      "repository": "EbookFoundation/free-programming-books",
+      "description": "Massive curated index of freely available programming learning resources.",
+      "snapshot": {
+        "stars": 394031,
+        "defaultBranch": "main",
+        "checkedAt": "2026-08-09T15:25:00Z"
+      },
+      "rights": {
+        "status": "verified",
+        "license": "CC-BY-4.0",
+        "redistribution": "metadata-only",
+        "commercialUse": true,
+        "evidenceUrl": "https://github.com/EbookFoundation/free-programming-books",
+        "notes": "The curated list is CC-BY-4.0; every linked book/course/document keeps independent rights and needs its own evidence before mirroring."
+      },
+      "priority": "high",
+      "adapters": ["github", "link-index"]
+    },
+    {
+      "id": "github.nvidia.skills",
+      "title": "NVIDIA Agent Skills",
+      "kind": "agent-skill-collection",
+      "url": "https://github.com/NVIDIA/skills",
+      "repository": "NVIDIA/skills",
+      "description": "Agent Skills designed for coding agents and end-to-end NVIDIA workflows.",
+      "snapshot": {
+        "stars": 2828,
+        "defaultBranch": "main",
+        "checkedAt": "2026-08-09T15:50:00Z"
+      },
+      "rights": {
+        "status": "verified",
+        "license": "Apache-2.0",
+        "redistribution": "selective",
+        "commercialUse": true,
+        "evidenceUrl": "https://github.com/NVIDIA/skills",
+        "notes": "Strong reference for AI-native packaging. Ingest skill-by-skill and preserve upstream notices/any file-level license exceptions."
+      },
+      "priority": "high",
+      "adapters": ["github", "agent-skill"]
+    },
+    {
+      "id": "web.godotshaders",
+      "title": "Godot Shaders",
+      "kind": "community-library",
+      "url": "https://godotshaders.com/",
+      "description": "Community-driven Godot shader library and useful discovery source.",
+      "snapshot": {
+        "checkedAt": "2026-08-09T15:00:00Z"
+      },
+      "rights": {
+        "status": "unknown",
+        "license": null,
+        "redistribution": "metadata-only",
+        "commercialUse": null,
+        "evidenceUrl": "https://godotshaders.com/",
+        "notes": "No site-wide redistribution license was established from the public landing page. Verify each shader before copying code; otherwise keep link + metadata only."
+      },
+      "priority": "medium",
+      "adapters": ["web", "community-library"]
+    }
+  ]
+}
