@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0",
+  "id": "godot.hierarchical-finite-state-machine",
+  "title": "Godot Hierarchical Finite State Machine Core",
+  "description": "Copy-ready core state interface and state-machine implementation normalized from the official Godot demo project.",
+  "kind": "template",
+  "tags": ["godot", "gdscript", "gameplay", "state-machine", "fsm", "architecture"],
+  "source": {
+    "type": "github",
+    "url": "https://github.com/godotengine/godot-demo-projects/tree/master/2d/finite_state_machine",
+    "repository": "godotengine/godot-demo-projects",
+    "ref": "master",
+    "path": "2d/finite_state_machine",
+    "author": "Godot Engine contributors",
+    "retrievedAt": "2026-08-09T16:05:00Z"
+  },
+  "rights": {
+    "status": "verified",
+    "license": "MIT",
+    "redistribution": "selective",
+    "commercialUse": true,
+    "derivatives": true,
+    "attributionRequired": true,
+    "evidenceUrl": "https://github.com/godotengine/godot-demo-projects/blob/master/LICENSE.md",
+    "verifiedAt": "2026-08-09T16:05:00Z",
+    "notes": "RatCodex mirrors only the two core GDScript files in this package. The complete upstream demo remains linked and may contain additional assets/notices that should be reviewed before copying wholesale."
+  },
+  "ai": {
+    "entrypoint": "SKILL.md",
+    "contextMode": "portable",
+    "copyReady": true,
+    "transcriptPolicy": "none"
+  },
+  "compatibility": {
+    "engines": ["Godot 4"],
+    "languages": ["GDScript"],
+    "platforms": ["cross-platform"]
+  },
+  "forge": {
+    "profiles": ["ai-portable", "runtime-safe", "private-full"],
+    "installMode": "copy"
+  },
+  "upstream": {
+    "demo": "Hierarchical Finite State Machine",
+    "renderer": "Compatibility",
+    "files": [
+      {
+        "path": "2d/finite_state_machine/state_machine/state.gd",
+        "githubBlobSha": "9d7fd23bbdab0afd86f268eb84406597d35cfea5",
+        "ratcodexPath": "templates/state.gd",
+        "sha256": "2f38f30e9344d7111b005b180d75cbda225f2fc44bbef082232eb896ca9eadc5",
+        "bytes": 621
+      },
+      {
+        "path": "2d/finite_state_machine/state_machine/state_machine.gd",
+        "githubBlobSha": "fb8ef3989c1abe508a1d725fda09fe042f9290e3",
+        "ratcodexPath": "templates/state_machine.gd",
+        "sha256": "ecbcd7968b3b2e0fbae33156d0a66b9aed5e0af711dd9fad50e2b2d771dadfb9",
+        "bytes": 2175
+      }
+    ]
+  }
+}
