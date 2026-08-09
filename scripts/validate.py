@@ -9,6 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "catalog"
 PACKAGES = ROOT / "packages"
 
+PREVIEW_MODES = {"image", "gallery", "video", "html", "godot-scene", "model", "audio", "none"}
+PREVIEW_PROVIDERS = {"package", "upstream", "forge-local", "generated"}
+
 
 def load_json(path: Path):
     try:
@@ -23,6 +26,11 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def safe_relative(value: str) -> bool:
+    candidate = Path(value)
+    return bool(value) and not candidate.is_absolute() and ".." not in candidate.parts
 
 
 def is_runtime_blocked(manifest: dict) -> bool:
@@ -40,6 +48,41 @@ def is_runtime_blocked(manifest: dict) -> bool:
         "permission-required",
     )
     return any(token in license_text for token in blocked)
+
+
+def validate_preview(package_dir: Path, preview: dict, rel: Path, errors: list[str]) -> None:
+    mode = preview.get("mode")
+    provider = preview.get("provider")
+    if mode not in PREVIEW_MODES:
+        errors.append(f"{rel}: invalid preview.mode={mode!r}")
+    if provider not in PREVIEW_PROVIDERS:
+        errors.append(f"{rel}: invalid preview.provider={provider!r}")
+
+    if mode == "godot-scene" and not (preview.get("entrypoint") or preview.get("runtimeEntrypoint")):
+        errors.append(f"{rel}: godot-scene preview needs entrypoint or runtimeEntrypoint")
+
+    if provider == "upstream" and mode not in {"none", "godot-scene"}:
+        if not preview.get("heroUrl") and not preview.get("gallery"):
+            errors.append(f"{rel}: upstream visual preview needs heroUrl or gallery")
+
+    if provider not in {"package", "generated"}:
+        return
+
+    local_refs: list[str] = []
+    for key in ("hero", "entrypoint", "runtimeEntrypoint"):
+        value = preview.get(key)
+        if value:
+            local_refs.append(value)
+    for value in preview.get("gallery", []):
+        if isinstance(value, str) and "://" not in value:
+            local_refs.append(value)
+
+    for value in local_refs:
+        if not safe_relative(value):
+            errors.append(f"{rel}: unsafe preview path: {value}")
+            continue
+        if not (package_dir / value).is_file():
+            errors.append(f"{rel}: preview file missing: {value}")
 
 
 def validate_manifest(path: Path, errors: list[str]) -> dict | None:
@@ -80,6 +123,13 @@ def validate_manifest(path: Path, errors: list[str]) -> dict | None:
     if rights.get("redistribution") == "metadata-only" and ai.get("copyReady"):
         errors.append(f"{rel}: metadata-only resource cannot be copyReady")
 
+    preview = manifest.get("preview")
+    if preview is not None:
+        if not isinstance(preview, dict):
+            errors.append(f"{rel}: preview must be an object")
+        else:
+            validate_preview(path.parent, preview, rel, errors)
+
     forge_profiles = manifest.get("forge", {}).get("profiles", [])
     if "runtime-safe" in forge_profiles and is_runtime_blocked(manifest):
         errors.append(f"{rel}: runtime-safe is forbidden by current rights state/license")
@@ -88,6 +138,9 @@ def validate_manifest(path: Path, errors: list[str]) -> dict | None:
         local_rel = item.get("ratcodexPath")
         if not local_rel:
             errors.append(f"{rel}: upstream file missing ratcodexPath")
+            continue
+        if not safe_relative(local_rel):
+            errors.append(f"{rel}: unsafe mirrored file path: {local_rel}")
             continue
         local = path.parent / local_rel
         if not local.is_file():
@@ -163,10 +216,28 @@ def main() -> int:
     if stats.get("packages") != len(manifests):
         errors.append(f"catalog/index.json stats.packages={stats.get('packages')}, expected={len(manifests)}")
 
+    visual_count = sum(1 for manifest in manifests.values() if manifest.get("preview", {}).get("mode") not in {None, "none"})
+    if stats.get("visualPackages") is not None and stats.get("visualPackages") != visual_count:
+        errors.append(f"catalog/index.json stats.visualPackages={stats.get('visualPackages')}, expected={visual_count}")
+
+    for row in indexed:
+        rid = row.get("id")
+        manifest = manifests.get(rid)
+        if not manifest:
+            continue
+        if row.get("preview") != manifest.get("preview") and row.get("preview") is not None:
+            # The compact index may omit notes/capture fields but must preserve the core visual identity.
+            indexed_preview = row.get("preview", {})
+            canonical_preview = manifest.get("preview", {})
+            for key in ("mode", "provider", "hero", "heroUrl", "entrypoint", "runtimeEntrypoint", "interactive", "aspectRatio", "fallback"):
+                if key in indexed_preview and indexed_preview.get(key) != canonical_preview.get(key):
+                    errors.append(f"catalog/index.json package {rid}: preview.{key} differs from manifest")
+
     payload = {
         "ok": not errors,
         "sources": len(source_rows),
         "packages": len(manifests),
+        "visualPackages": visual_count,
         "errors": errors,
         "warnings": warnings,
     }
