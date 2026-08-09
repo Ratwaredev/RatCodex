@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-09T16:10:00Z",
+  "stats": {
+    "sources": 7,
+    "packages": 1,
+    "copyReadyPackages": 1
+  },
+  "packages": [
+    {
+      "id": "godot.hierarchical-finite-state-machine",
+      "title": "Godot Hierarchical Finite State Machine Core",
+      "kind": "template",
+      "manifest": "packages/godot.hierarchical-finite-state-machine/manifest.json",
+      "skill": "packages/godot.hierarchical-finite-state-machine/SKILL.md",
+      "rights": {
+        "status": "verified",
+        "license": "MIT",
+        "redistribution": "selective"
+      },
+      "compatibility": {
+        "engines": ["Godot 4"],
+        "languages": ["GDScript"]
+      },
+      "forgeProfiles": ["ai-portable", "runtime-safe", "private-full"],
+      "copyReady": true,
+      "tags": ["godot", "gdscript", "gameplay", "state-machine", "fsm", "architecture"]
+    }
+  ]
+}
