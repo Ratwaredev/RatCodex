@@ -1,10 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-09T16:10:00Z",
+  "generatedAt": "2026-08-09T16:28:00Z",
   "stats": {
     "sources": 7,
     "packages": 1,
-    "copyReadyPackages": 1
+    "copyReadyPackages": 1,
+    "visualPackages": 1
   },
   "packages": [
     {
@@ -17,6 +18,14 @@
         "status": "verified",
         "license": "MIT",
         "redistribution": "selective"
+      },
+      "preview": {
+        "mode": "image",
+        "provider": "upstream",
+        "heroUrl": "https://raw.githubusercontent.com/godotengine/godot-demo-projects/4652e17c04fe5f249dc53949fb195a3d8b24ee5f/2d/finite_state_machine/screenshots/fsm-attack.png",
+        "interactive": false,
+        "aspectRatio": "16:9",
+        "fallback": "source"
       },
       "compatibility": {
         "engines": ["Godot 4"],
