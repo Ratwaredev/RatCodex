@@ -97,7 +97,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## North star
 
-**10k+ GitHub stars is the adoption target, not a vanity promise.** The repo should earn that by becoming the place where an agent can answer: _“Do we already have a legal, tested implementation of this?”_ and immediately retrieve one.
+The repo should earn that by becoming the place where an agent can answer: _“Do we already have a legal, tested implementation of this?”_ and immediately retrieve one.
 
 The growth loop is:
 
