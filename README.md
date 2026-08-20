@@ -73,12 +73,11 @@ See [`docs/LICENSING.md`](docs/LICENSING.md).
 
 [`catalog/sources.json`](catalog/sources.json) contains upstream collections and discovery sources. A source entry is not the same thing as a copy-ready package: each downstream resource still needs its own rights and validation evidence.
 
-## Forge Studio and RatLab
+## Consumers
 
-RatCodex remains the canonical public resource catalog. Forge Studio and RatLab can consume it without forking provenance or trust metadata.
+RatCodex is its own public registry. Consumers should read its generated catalog and manifests directly instead of routing through another Ratware product.
 
-- Forge export profiles: `ai-portable`, `runtime-safe`, `private-full`.
-- RatLab surfaces: BIBLE and SKILLS.
+Forge Studio is the primary product integration: it can search/import RatCodex resources while preserving exact versions, hashes, rights and notices. RatLab is intentionally separate; its creative prompt/preset library is not a RatCodex frontend.
 
 See [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md).
 
@@ -102,15 +101,17 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 - [ ] Ingestion CLI (`ratcodex add <url>`)
 - [ ] GitHub source crawler + license evidence cache
 - [ ] Generated catalog/index from manifests
+- [ ] Read-only HTTP catalog/search API
 - [ ] Preview generation for supported resources
 - [ ] Forge Studio one-click install/import
-- [ ] RatLab searchable API
 - [ ] Contribution bot for rights/test policy
 - [ ] Public catalog site
 
 ## Non-goals
 
 RatCodex will not republish material merely because it is easy to download, infer file-level rights from a repository badge, execute contributor-supplied shell commands, strip attribution, or label an implementation copy ready without a reproducible test.
+
+It also will not depend on RatLab for search, distribution or API availability.
 
 ## License
 
