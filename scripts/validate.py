@@ -92,12 +92,20 @@ def validate_preview(package_dir: Path, preview: dict, rel: Path, errors: list[s
             errors.append(f"{rel}: preview file missing: {value}")
 
 
-def validate_file_records(package_dir: Path, records: list[dict], rel: Path, label: str, errors: list[str]) -> int:
+def validate_file_records(
+    package_dir: Path,
+    records: list[dict],
+    rel: Path,
+    label: str,
+    errors: list[str],
+    *,
+    path_keys: tuple[str, ...] = ("path",),
+) -> int:
     checked = 0
     for item in records:
-        local_rel = item.get("path") or item.get("ratcodexPath")
+        local_rel = next((item.get(key) for key in path_keys if item.get(key)), None)
         if not local_rel:
-            errors.append(f"{rel}: {label} file missing path")
+            errors.append(f"{rel}: {label} file missing local path")
             continue
         if not safe_relative(local_rel):
             errors.append(f"{rel}: unsafe {label} file path: {local_rel}")
@@ -191,6 +199,7 @@ def validate_manifest(path: Path, errors: list[str]) -> dict | None:
         rel,
         "integrity",
         errors,
+        path_keys=("path",),
     )
     upstream_count = validate_file_records(
         path.parent,
@@ -198,6 +207,7 @@ def validate_manifest(path: Path, errors: list[str]) -> dict | None:
         rel,
         "mirrored",
         errors,
+        path_keys=("ratcodexPath", "path"),
     )
 
     if ai.get("copyReady"):
