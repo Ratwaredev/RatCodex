@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0",
+  "id": "python.retry-with-backoff",
+  "title": "Python Retry With Bounded Backoff",
+  "description": "Dependency-free synchronous retry helper with bounded exponential backoff and explicit exception filtering.",
+  "kind": "template",
+  "tags": ["python", "retry", "backoff", "resilience", "stdlib"],
+  "source": {
+    "type": "local",
+    "url": "https://github.com/Ratwaredev/RatCodex/tree/main/packages/python.retry-with-backoff",
+    "author": "RatCodex contributors",
+    "retrievedAt": "2026-08-20T10:35:00Z"
+  },
+  "rights": {
+    "status": "verified",
+    "license": "MIT",
+    "redistribution": "mirror",
+    "commercialUse": true,
+    "derivatives": true,
+    "attributionRequired": true,
+    "evidenceUrl": "https://github.com/Ratwaredev/RatCodex/blob/main/LICENSE",
+    "verifiedAt": "2026-08-20T10:35:00Z",
+    "notes": "Original RatCodex template covered by the repository MIT license."
+  },
+  "ai": {
+    "entrypoint": "SKILL.md",
+    "contextMode": "portable",
+    "copyReady": true,
+    "transcriptPolicy": "none"
+  },
+  "validation": {
+    "level": "runtime",
+    "status": "passed",
+    "runner": "python",
+    "tests": ["tests/test_retry.py"],
+    "testedAt": "2026-08-20T10:35:00Z",
+    "environment": "Local CPython 3.13.5; CI CPython 3.12",
+    "notes": "CI reruns the package test before merge."
+  },
+  "preview": {
+    "mode": "none",
+    "provider": "package",
+    "interactive": false,
+    "fallback": "none"
+  },
+  "compatibility": {
+    "languages": ["Python"],
+    "platforms": ["cross-platform"],
+    "runtimes": ["Python >=3.10"]
+  },
+  "forge": {
+    "profiles": ["ai-portable", "runtime-safe", "private-full"],
+    "installMode": "copy"
+  },
+  "integrity": {
+    "files": [
+      {
+        "path": "templates/retry.py",
+        "sha256": "e9cc87a92d4e733e90cbfc0f4ec67bbb0b17224b31846e2fa0ceb7d1f887b638",
+        "bytes": 1129
+      },
+      {
+        "path": "tests/test_retry.py",
+        "sha256": "485c0a8222f42073ecfd25b21d0da9853b5bb634fe9085e4256be2b38de794e3",
+        "bytes": 1541
+      }
+    ]
+  }
+}
