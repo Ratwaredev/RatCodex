@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0",
+  "id": "python.atomic-json-write",
+  "title": "Python Atomic JSON Write",
+  "description": "Dependency-free atomic JSON file replacement that preserves the previous file when serialization fails.",
+  "kind": "template",
+  "tags": ["python", "json", "filesystem", "atomic-write", "stdlib"],
+  "source": {
+    "type": "local",
+    "url": "https://github.com/Ratwaredev/RatCodex/tree/main/packages/python.atomic-json-write",
+    "author": "RatCodex contributors",
+    "retrievedAt": "2026-08-20T10:35:00Z"
+  },
+  "rights": {
+    "status": "verified",
+    "license": "MIT",
+    "redistribution": "mirror",
+    "commercialUse": true,
+    "derivatives": true,
+    "attributionRequired": true,
+    "evidenceUrl": "https://github.com/Ratwaredev/RatCodex/blob/main/LICENSE",
+    "verifiedAt": "2026-08-20T10:35:00Z",
+    "notes": "Original RatCodex template covered by the repository MIT license."
+  },
+  "ai": {
+    "entrypoint": "SKILL.md",
+    "contextMode": "portable",
+    "copyReady": true,
+    "transcriptPolicy": "none"
+  },
+  "validation": {
+    "level": "runtime",
+    "status": "passed",
+    "runner": "python",
+    "tests": ["tests/test_atomic_json.py"],
+    "testedAt": "2026-08-20T10:35:00Z",
+    "environment": "Local CPython 3.13.5; CI CPython 3.12",
+    "notes": "CI reruns the package test before merge."
+  },
+  "preview": {
+    "mode": "none",
+    "provider": "package",
+    "interactive": false,
+    "fallback": "none"
+  },
+  "compatibility": {
+    "languages": ["Python"],
+    "platforms": ["cross-platform"],
+    "runtimes": ["Python >=3.10"]
+  },
+  "forge": {
+    "profiles": ["ai-portable", "runtime-safe", "private-full"],
+    "installMode": "copy"
+  },
+  "integrity": {
+    "files": [
+      {
+        "path": "templates/atomic_json.py",
+        "sha256": "1c5dc94e08339ce770aa9df88c7492b2d4e5d3ef1033790980c9fb960bd32368",
+        "bytes": 951
+      },
+      {
+        "path": "tests/test_atomic_json.py",
+        "sha256": "3af3c24d4948fc28a85075eb7ede561f27d3d08197e8c07033e497a5a2f04b4a",
+        "bytes": 1585
+      }
+    ]
+  }
+}

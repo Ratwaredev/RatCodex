@@ -1,10 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-09T16:28:00Z",
+  "generatedAt": "2026-08-20T10:35:00Z",
   "stats": {
     "sources": 7,
-    "packages": 1,
-    "copyReadyPackages": 1,
+    "packages": 4,
+    "copyReadyPackages": 3,
+    "runtimeTestedPackages": 3,
     "visualPackages": 1
   },
   "packages": [
@@ -29,11 +30,94 @@
       },
       "compatibility": {
         "engines": ["Godot 4"],
-        "languages": ["GDScript"]
+        "languages": ["GDScript"],
+        "platforms": ["cross-platform"]
+      },
+      "forgeProfiles": ["ai-portable", "runtime-safe", "private-full"],
+      "copyReady": false,
+      "validation": {
+        "level": "runtime",
+        "status": "not-tested"
+      },
+      "tags": ["godot", "gdscript", "gameplay", "state-machine", "fsm", "architecture"]
+    },
+    {
+      "id": "node.safe-json-fetch",
+      "title": "Node Safe JSON Fetch",
+      "kind": "template",
+      "manifest": "packages/node.safe-json-fetch/manifest.json",
+      "skill": "packages/node.safe-json-fetch/SKILL.md",
+      "rights": {
+        "status": "verified",
+        "license": "MIT",
+        "redistribution": "mirror"
+      },
+      "compatibility": {
+        "languages": ["JavaScript"],
+        "platforms": ["cross-platform"],
+        "runtimes": ["Node.js >=18"]
       },
       "forgeProfiles": ["ai-portable", "runtime-safe", "private-full"],
       "copyReady": true,
-      "tags": ["godot", "gdscript", "gameplay", "state-machine", "fsm", "architecture"]
+      "validation": {
+        "level": "runtime",
+        "status": "passed",
+        "runner": "node",
+        "testedAt": "2026-08-20T10:35:00Z"
+      },
+      "tags": ["node", "javascript", "fetch", "http", "json", "timeout"]
+    },
+    {
+      "id": "python.atomic-json-write",
+      "title": "Python Atomic JSON Write",
+      "kind": "template",
+      "manifest": "packages/python.atomic-json-write/manifest.json",
+      "skill": "packages/python.atomic-json-write/SKILL.md",
+      "rights": {
+        "status": "verified",
+        "license": "MIT",
+        "redistribution": "mirror"
+      },
+      "compatibility": {
+        "languages": ["Python"],
+        "platforms": ["cross-platform"],
+        "runtimes": ["Python >=3.10"]
+      },
+      "forgeProfiles": ["ai-portable", "runtime-safe", "private-full"],
+      "copyReady": true,
+      "validation": {
+        "level": "runtime",
+        "status": "passed",
+        "runner": "python",
+        "testedAt": "2026-08-20T10:35:00Z"
+      },
+      "tags": ["python", "json", "filesystem", "atomic-write", "stdlib"]
+    },
+    {
+      "id": "python.retry-with-backoff",
+      "title": "Python Retry With Bounded Backoff",
+      "kind": "template",
+      "manifest": "packages/python.retry-with-backoff/manifest.json",
+      "skill": "packages/python.retry-with-backoff/SKILL.md",
+      "rights": {
+        "status": "verified",
+        "license": "MIT",
+        "redistribution": "mirror"
+      },
+      "compatibility": {
+        "languages": ["Python"],
+        "platforms": ["cross-platform"],
+        "runtimes": ["Python >=3.10"]
+      },
+      "forgeProfiles": ["ai-portable", "runtime-safe", "private-full"],
+      "copyReady": true,
+      "validation": {
+        "level": "runtime",
+        "status": "passed",
+        "runner": "python",
+        "testedAt": "2026-08-20T10:35:00Z"
+      },
+      "tags": ["python", "retry", "backoff", "resilience", "stdlib"]
     }
   ]
 }

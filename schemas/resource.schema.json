@@ -64,6 +64,24 @@
         "transcriptPolicy": { "enum": ["full-allowed", "summary-only", "none"] }
       }
     },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "status"],
+      "properties": {
+        "level": { "enum": ["integrity", "static", "runtime"] },
+        "status": { "enum": ["passed", "failed", "not-tested"] },
+        "runner": { "enum": ["python", "node", "godot-headless", "manual"] },
+        "tests": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "testedAt": { "type": ["string", "null"], "format": "date-time" },
+        "environment": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
     "preview": {
       "type": "object",
       "additionalProperties": false,
@@ -144,7 +162,20 @@
       "additionalProperties": false,
       "properties": {
         "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
-        "bytes": { "type": "integer", "minimum": 0 }
+        "bytes": { "type": "integer", "minimum": 0 },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256", "bytes"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+              "bytes": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
       }
     },
     "upstream": {

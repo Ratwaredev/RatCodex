@@ -11,6 +11,9 @@ PACKAGES = ROOT / "packages"
 
 PREVIEW_MODES = {"image", "gallery", "video", "html", "godot-scene", "model", "audio", "none"}
 PREVIEW_PROVIDERS = {"package", "upstream", "forge-local", "generated"}
+VALIDATION_LEVELS = {"integrity", "static", "runtime"}
+VALIDATION_STATUSES = {"passed", "failed", "not-tested"}
+VALIDATION_RUNNERS = {"python", "node", "godot-headless", "manual"}
 
 
 def load_json(path: Path):
@@ -50,6 +53,11 @@ def is_runtime_blocked(manifest: dict) -> bool:
     return any(token in license_text for token in blocked)
 
 
+def validation_is_runtime_passed(manifest: dict) -> bool:
+    validation = manifest.get("validation", {})
+    return validation.get("level") == "runtime" and validation.get("status") == "passed"
+
+
 def validate_preview(package_dir: Path, preview: dict, rel: Path, errors: list[str]) -> None:
     mode = preview.get("mode")
     provider = preview.get("provider")
@@ -80,9 +88,40 @@ def validate_preview(package_dir: Path, preview: dict, rel: Path, errors: list[s
     for value in local_refs:
         if not safe_relative(value):
             errors.append(f"{rel}: unsafe preview path: {value}")
-            continue
-        if not (package_dir / value).is_file():
+        elif not (package_dir / value).is_file():
             errors.append(f"{rel}: preview file missing: {value}")
+
+
+def validate_file_records(
+    package_dir: Path,
+    records: list[dict],
+    rel: Path,
+    label: str,
+    errors: list[str],
+    *,
+    path_keys: tuple[str, ...] = ("path",),
+) -> int:
+    checked = 0
+    for item in records:
+        local_rel = next((item.get(key) for key in path_keys if item.get(key)), None)
+        if not local_rel:
+            errors.append(f"{rel}: {label} file missing local path")
+            continue
+        if not safe_relative(local_rel):
+            errors.append(f"{rel}: unsafe {label} file path: {local_rel}")
+            continue
+        local = package_dir / local_rel
+        if not local.is_file():
+            errors.append(f"{rel}: {label} file missing: {local_rel}")
+            continue
+        checked += 1
+        expected_bytes = item.get("bytes")
+        if expected_bytes is not None and local.stat().st_size != expected_bytes:
+            errors.append(f"{rel}: {local_rel} bytes={local.stat().st_size}, expected={expected_bytes}")
+        expected_hash = item.get("sha256")
+        if expected_hash and sha256(local) != expected_hash:
+            errors.append(f"{rel}: {local_rel} sha256 mismatch")
+    return checked
 
 
 def validate_manifest(path: Path, errors: list[str]) -> dict | None:
@@ -117,8 +156,8 @@ def validate_manifest(path: Path, errors: list[str]) -> dict | None:
 
     ai = manifest.get("ai", {})
     entrypoint = ai.get("entrypoint", "SKILL.md")
-    if not (path.parent / entrypoint).is_file():
-        errors.append(f"{rel}: missing AI entrypoint {entrypoint}")
+    if not safe_relative(entrypoint) or not (path.parent / entrypoint).is_file():
+        errors.append(f"{rel}: missing or unsafe AI entrypoint {entrypoint}")
 
     if rights.get("redistribution") == "metadata-only" and ai.get("copyReady"):
         errors.append(f"{rel}: metadata-only resource cannot be copyReady")
@@ -134,26 +173,50 @@ def validate_manifest(path: Path, errors: list[str]) -> dict | None:
     if "runtime-safe" in forge_profiles and is_runtime_blocked(manifest):
         errors.append(f"{rel}: runtime-safe is forbidden by current rights state/license")
 
-    for item in manifest.get("upstream", {}).get("files", []):
-        local_rel = item.get("ratcodexPath")
-        if not local_rel:
-            errors.append(f"{rel}: upstream file missing ratcodexPath")
-            continue
-        if not safe_relative(local_rel):
-            errors.append(f"{rel}: unsafe mirrored file path: {local_rel}")
-            continue
-        local = path.parent / local_rel
-        if not local.is_file():
-            errors.append(f"{rel}: mirrored file missing: {local_rel}")
-            continue
-        expected_bytes = item.get("bytes")
-        if expected_bytes is not None and local.stat().st_size != expected_bytes:
-            errors.append(
-                f"{rel}: {local_rel} bytes={local.stat().st_size}, expected={expected_bytes}"
-            )
-        expected_hash = item.get("sha256")
-        if expected_hash and sha256(local) != expected_hash:
-            errors.append(f"{rel}: {local_rel} sha256 mismatch")
+    validation = manifest.get("validation", {})
+    if validation:
+        if validation.get("level") not in VALIDATION_LEVELS:
+            errors.append(f"{rel}: invalid validation.level")
+        if validation.get("status") not in VALIDATION_STATUSES:
+            errors.append(f"{rel}: invalid validation.status")
+        runner = validation.get("runner")
+        if runner is not None and runner not in VALIDATION_RUNNERS:
+            errors.append(f"{rel}: invalid validation.runner")
+        tests = validation.get("tests", [])
+        for test_path in tests:
+            if not safe_relative(test_path):
+                errors.append(f"{rel}: unsafe validation test path: {test_path}")
+            elif not (path.parent / test_path).is_file():
+                errors.append(f"{rel}: validation test missing: {test_path}")
+        if validation.get("status") == "passed" and not tests:
+            errors.append(f"{rel}: passed validation requires at least one test")
+        if validation.get("status") == "passed" and not validation.get("testedAt"):
+            errors.append(f"{rel}: passed validation requires testedAt")
+
+    integrity_count = validate_file_records(
+        path.parent,
+        manifest.get("integrity", {}).get("files", []),
+        rel,
+        "integrity",
+        errors,
+        path_keys=("path",),
+    )
+    upstream_count = validate_file_records(
+        path.parent,
+        manifest.get("upstream", {}).get("files", []),
+        rel,
+        "mirrored",
+        errors,
+        path_keys=("ratcodexPath", "path"),
+    )
+
+    if ai.get("copyReady"):
+        if is_runtime_blocked(manifest):
+            errors.append(f"{rel}: copyReady requires verified runtime-allowed rights")
+        if not validation_is_runtime_passed(manifest):
+            errors.append(f"{rel}: copyReady requires validation.level=runtime and status=passed")
+        if integrity_count + upstream_count == 0:
+            errors.append(f"{rel}: copyReady requires hashed package content")
 
     if rights.get("redistribution") in {"mirror", "selective"} and not (path.parent / "NOTICE.md").is_file():
         errors.append(f"{rel}: redistributed package requires NOTICE.md")
@@ -211,22 +274,31 @@ def main() -> int:
         errors.append(f"catalog/index.json references missing packages: {stale_index}")
 
     stats = index.get("stats", {})
-    if stats.get("sources") != len(source_rows):
-        errors.append(f"catalog/index.json stats.sources={stats.get('sources')}, expected={len(source_rows)}")
-    if stats.get("packages") != len(manifests):
-        errors.append(f"catalog/index.json stats.packages={stats.get('packages')}, expected={len(manifests)}")
-
-    visual_count = sum(1 for manifest in manifests.values() if manifest.get("preview", {}).get("mode") not in {None, "none"})
-    if stats.get("visualPackages") is not None and stats.get("visualPackages") != visual_count:
-        errors.append(f"catalog/index.json stats.visualPackages={stats.get('visualPackages')}, expected={visual_count}")
+    expected_stats = {
+        "sources": len(source_rows),
+        "packages": len(manifests),
+        "copyReadyPackages": sum(1 for m in manifests.values() if m.get("ai", {}).get("copyReady")),
+        "runtimeTestedPackages": sum(1 for m in manifests.values() if validation_is_runtime_passed(m)),
+        "visualPackages": sum(1 for m in manifests.values() if m.get("preview", {}).get("mode") not in {None, "none"}),
+    }
+    for key, expected in expected_stats.items():
+        if stats.get(key) != expected:
+            errors.append(f"catalog/index.json stats.{key}={stats.get(key)}, expected={expected}")
 
     for row in indexed:
         rid = row.get("id")
         manifest = manifests.get(rid)
         if not manifest:
             continue
-        if row.get("preview") != manifest.get("preview") and row.get("preview") is not None:
-            indexed_preview = row.get("preview", {})
+        if row.get("copyReady") != bool(manifest.get("ai", {}).get("copyReady")):
+            errors.append(f"catalog/index.json package {rid}: copyReady differs from manifest")
+        if row.get("validation") is not None:
+            canonical = manifest.get("validation", {})
+            for key in ("level", "status", "runner", "testedAt"):
+                if key in row["validation"] and row["validation"].get(key) != canonical.get(key):
+                    errors.append(f"catalog/index.json package {rid}: validation.{key} differs from manifest")
+        indexed_preview = row.get("preview")
+        if indexed_preview is not None:
             canonical_preview = manifest.get("preview", {})
             for key in ("mode", "provider", "url", "hero", "heroUrl", "entrypoint", "runtimeEntrypoint", "interactive", "aspectRatio", "fallback"):
                 if key in indexed_preview and indexed_preview.get(key) != canonical_preview.get(key):
@@ -234,9 +306,7 @@ def main() -> int:
 
     payload = {
         "ok": not errors,
-        "sources": len(source_rows),
-        "packages": len(manifests),
-        "visualPackages": visual_count,
+        **expected_stats,
         "errors": errors,
         "warnings": warnings,
     }
