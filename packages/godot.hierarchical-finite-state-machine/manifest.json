@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "id": "godot.hierarchical-finite-state-machine",
   "title": "Godot Hierarchical Finite State Machine Core",
-  "description": "Copy-ready core state interface and state-machine implementation normalized from the official Godot demo project.",
+  "description": "Core state interface and state-machine implementation normalized from the official Godot demo project.",
   "kind": "template",
   "tags": ["godot", "gdscript", "gameplay", "state-machine", "fsm", "architecture"],
   "source": {
@@ -28,8 +28,13 @@
   "ai": {
     "entrypoint": "SKILL.md",
     "contextMode": "portable",
-    "copyReady": true,
+    "copyReady": false,
     "transcriptPolicy": "none"
+  },
+  "validation": {
+    "level": "runtime",
+    "status": "not-tested",
+    "notes": "License, provenance, byte size and SHA-256 are verified. A Godot runtime smoke test has not yet been executed by RatCodex, so this package is not copyReady."
   },
   "preview": {
     "mode": "image",
@@ -38,7 +43,7 @@
     "interactive": false,
     "aspectRatio": "16:9",
     "fallback": "source",
-    "notes": "Official upstream screenshot pinned to the same immutable source commit. Forge can still import the copy-ready GDScript core exactly as before."
+    "notes": "Official upstream screenshot pinned to the same immutable source commit."
   },
   "compatibility": {
     "engines": ["Godot 4"],
