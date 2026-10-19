@@ -1,0 +1,28 @@
+name: Vercel failover safety
+on:
+  push:
+    paths:
+      - "ops/vercel-failover.mjs"
+      - "ops/vercel-failover.test.mjs"
+      - ".github/workflows/ops-vercel-failover.yml"
+  pull_request:
+    paths:
+      - "ops/vercel-failover.mjs"
+      - "ops/vercel-failover.test.mjs"
+      - ".github/workflows/ops-vercel-failover.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-failover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Verify read-only default and alias concurrency guard
+        run: node --test ops/vercel-failover.test.mjs
