@@ -13,7 +13,8 @@ export function parseArgs(argv) {
     options[arg.slice(2)] = rest[++i];
   }
   if (!options.domain || !/^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/i.test(options.domain)) throw new Error('--domain must be hostname only');
-  if (action === 'switch' && (!options.target || !options['expected-current'] || !options.marker)) throw new Error('switch requires --target, --expected-current and --marker');
+  if (!options.marker) throw new Error('--marker is required for a verifiable HTTP result');
+  if (action === 'switch' && (!options.target || !options['expected-current'])) throw new Error('switch requires --target and --expected-current');
   const paths = (options.routes || '/,/login,/app').split(',').map(x => x.trim());
   if (paths.some(x => !x.startsWith('/') || x.startsWith('//'))) throw new Error('Routes must be absolute paths');
   return options;
